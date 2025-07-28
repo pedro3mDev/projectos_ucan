@@ -1,0 +1,4 @@
+1;Angolana
+2;Portuguesa
+3;Brasileira
+4;Moçambicana

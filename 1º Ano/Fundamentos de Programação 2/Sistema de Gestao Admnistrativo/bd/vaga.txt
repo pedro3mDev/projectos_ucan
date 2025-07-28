@@ -1,0 +1,3 @@
+V1753618991532;aaaa;aaaaaa;Substituição;Analista;RH;1
+V1753625393200;bbbb;bbb;Substituição;Analista;RH;2
+V1753691861175;Vaga Assistente Admnistrativo;Preciso de Um Assistente de RH Para a Empresa XPTO;Substituição;Assistente Admnistrativo;RH;10
