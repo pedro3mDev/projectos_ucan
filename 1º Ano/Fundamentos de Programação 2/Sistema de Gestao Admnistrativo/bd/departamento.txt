@@ -1,2 +1,7 @@
-1;Director
-2;Assistente Admnistrativo
+1;Direcção
+2;Recursos Humanos
+3;Tecnologia
+4;Contabilidade
+5;Logistica
+6;Marketing
+7;Relações Publicas

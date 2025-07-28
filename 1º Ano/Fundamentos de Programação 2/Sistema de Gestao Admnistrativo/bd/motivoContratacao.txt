@@ -1,0 +1,2 @@
+1;Contratação por Substituição
+2;Contratação por Adição

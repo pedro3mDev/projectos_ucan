@@ -28,7 +28,6 @@ public class NovaVaga extends JFrame implements ActionListener {
 
 	public void adicionarComponentes() {
 		setLayout(null);
-
 		tituloLbl = new JLabel("Cadastro de Nova Vaga");
 		tituloLbl.setBounds(200, 10, 300, 30);
 		add(tituloLbl);
@@ -37,7 +36,6 @@ public class NovaVaga extends JFrame implements ActionListener {
 		JLabel codigoLbl = new JLabel("Código da Vaga:");
 		codigoLbl.setBounds(30, 60, 120, 25);
 		add(codigoLbl);
-
 		codigoVagaField = new JTextField("Gerado automaticamente");
 		codigoVagaField.setBounds(160, 60, 380, 25);
 		codigoVagaField.setEnabled(false);
@@ -47,7 +45,6 @@ public class NovaVaga extends JFrame implements ActionListener {
 		JLabel nomeLbl = new JLabel("Nome da Vaga:");
 		nomeLbl.setBounds(30, 100, 120, 25);
 		add(nomeLbl);
-
 		nomeVagaField = new JTextField();
 		nomeVagaField.setBounds(160, 100, 380, 25);
 		add(nomeVagaField);
@@ -56,7 +53,6 @@ public class NovaVaga extends JFrame implements ActionListener {
 		JLabel descricaoLbl = new JLabel("Descrição:");
 		descricaoLbl.setBounds(30, 140, 120, 25);
 		add(descricaoLbl);
-
 		descricaoArea = new JTextArea();
 		JScrollPane scrollDescricao = new JScrollPane(descricaoArea);
 		scrollDescricao.setBounds(160, 140, 380, 80);
@@ -66,18 +62,26 @@ public class NovaVaga extends JFrame implements ActionListener {
 		JLabel motivoLbl = new JLabel("Motivo da Contratação:");
 		motivoLbl.setBounds(30, 235, 150, 25);
 		add(motivoLbl);
-
-		motivoCombo = new JComboBox<>(new String[] {
-				"Substituição", "Nova Demanda", "Ampliação", "Outros"
-		});
+		List<String> linhasMotivoContratacao = FicheiroUtil.carregarLinhas("bd/motivoContratacao.txt");
+		List<String> nomesMotivoContratacao = new ArrayList<>();
+		for (String linha : linhasMotivoContratacao) {
+			String[] partes = linha.split(";");
+			if (partes.length > 1) {
+				nomesMotivoContratacao.add(partes[1]);
+			}
+		}
+		if (nomesMotivoContratacao.isEmpty()) {
+			nomesMotivoContratacao.add("Nenhum Tipo de Contrataçao encontrado");
+		}
+		motivoCombo = new JComboBox<>(nomesMotivoContratacao.toArray(new String[0]));
 		motivoCombo.setBounds(190, 235, 350, 25);
 		add(motivoCombo);
+
 
 		// Cargo
 		JLabel cargoLbl = new JLabel("Cargo:");
 		cargoLbl.setBounds(30, 275, 120, 25);
 		add(cargoLbl);
-
 		List<String> linhas = FicheiroUtil.carregarLinhas("bd/cargo.txt");
 		List<String> nomes = new ArrayList<>();
 		for (String linha : linhas) {
@@ -93,15 +97,22 @@ public class NovaVaga extends JFrame implements ActionListener {
 		cargoCombo.setBounds(160, 275, 380, 25);
 		add(cargoCombo);
 
-
 		// Departamento
 		JLabel departamentoLbl = new JLabel("Departamento:");
 		departamentoLbl.setBounds(30, 315, 120, 25);
 		add(departamentoLbl);
-
-		departamentoCombo = new JComboBox<>(new String[] {
-				"RH", "Financeiro", "TI", "Operações"
-		});
+		List<String> linhasDepartamento = FicheiroUtil.carregarLinhas("bd/departamento.txt");
+		List<String> nomesDepartamento = new ArrayList<>();
+		for (String linha : linhasDepartamento) {
+			String[] partes = linha.split(";");
+			if (partes.length > 1) {
+				nomesDepartamento.add(partes[1]);
+			}
+		}
+		if (nomesDepartamento.isEmpty()) {
+			nomesDepartamento.add("Nenhum Departamento encontrado");
+		}
+		departamentoCombo = new JComboBox<>(nomesDepartamento.toArray(new String[0]));
 		departamentoCombo.setBounds(160, 315, 380, 25);
 		add(departamentoCombo);
 
@@ -109,7 +120,6 @@ public class NovaVaga extends JFrame implements ActionListener {
 		JLabel quantidadeLbl = new JLabel("Qtd. Recrutada:");
 		quantidadeLbl.setBounds(30, 355, 120, 25);
 		add(quantidadeLbl);
-
 		quantidadeField = new JTextField();
 		quantidadeField.setBounds(160, 355, 380, 25);
 		add(quantidadeField);

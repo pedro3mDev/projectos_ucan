@@ -5,14 +5,8 @@ Numero: 17285
 Ficheiro: Login.java
 --------------------------------------*/
 package hrGest.view;
-import hrGest.view.tabelas.Cargo;
-import hrGest.view.tabelas.Sexo;
-import hrGest.view.tabelas.EstadoCivil;
-import hrGest.view.tabelas.Nacionalidade;
-import hrGest.view.vaga.EditarVaga;
-import hrGest.view.vaga.EliminarVaga;
-import hrGest.view.vaga.ListagemVagas;
-import hrGest.view.vaga.NovaVaga;
+import hrGest.view.tabelas.*;
+import hrGest.view.vaga.*;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -29,7 +23,7 @@ public class Dashboard extends JFrame implements ActionListener
 	private JMenuItem novoCargoItem, editarCargoItem, eliminarCargoItem;
 	private JMenuItem novoTreinamentoItem, editarTreinamentoItem, eliminarTreinamentoItem;
 	private JMenuItem novoContratoItem, editarContratoItem, eliminarContratoItem;
-	private JMenuItem nacionalidadeTbItem, provinciaTbItem, municipioTbItem, comunaTbItem, estadoCivilTbItem, sexoTbItem, cargoTbItem;
+	private JMenuItem nacionalidadeTbItem, provinciaTbItem, municipioTbItem, comunaTbItem, estadoCivilTbItem, sexoTbItem, cargoTbItem, motivoContratacaoTbItem, departamentoTbItem;
 	private JMenuItem sobreItem;
 	private JMenuItem listarVagasItem;
 
@@ -103,6 +97,8 @@ public class Dashboard extends JFrame implements ActionListener
 		tabelasMenu.add( municipioTbItem = new JMenuItem("Municipio"));
 		tabelasMenu.add( comunaTbItem = new JMenuItem("Comuna"));
 		tabelasMenu.add( cargoTbItem = new JMenuItem("Cargos"));
+		tabelasMenu.add( departamentoTbItem = new JMenuItem("Departamento"));
+		tabelasMenu.add( motivoContratacaoTbItem = new JMenuItem("Tipos de Contratações"));
 
 		//Submenus (Ajuda)
 		ajudaMenu.add( sobreItem = new JMenuItem("Sobre"));
@@ -123,6 +119,8 @@ public class Dashboard extends JFrame implements ActionListener
 		comunaTbItem.addActionListener(e -> new ComunaListagem());
 		*/
 		cargoTbItem.addActionListener(e -> new Cargo());
+		departamentoTbItem.addActionListener(e -> new Departamento());
+		motivoContratacaoTbItem.addActionListener(e -> new MotivoContratacao());
 
 
 		sobreItem.addActionListener(this);
@@ -135,7 +133,7 @@ public class Dashboard extends JFrame implements ActionListener
 		if (source == novoVagaItem) {
 			new NovaVaga();
 		} else if (source == editarVagaItem) {
-			new EditarVaga();
+			new ListagemVagasParaEditar();
 		} else if (source == eliminarVagaItem) {
 			new EliminarVaga();
 		}

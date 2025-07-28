@@ -1,7 +1,13 @@
 package hrGest.view.vaga;
 
+import hrGest.model.VagaModel;
+import hrGest.controller.VagaController;
+import hrGest.util.FicheiroUtil;
+
 import javax.swing.*;
 import java.awt.event.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class EditarVaga extends JFrame implements ActionListener {
 
@@ -10,9 +16,15 @@ public class EditarVaga extends JFrame implements ActionListener {
 	private JComboBox<String> motivoCombo, cargoCombo, departamentoCombo;
 	private JButton salvarBtn, cancelarBtn;
 
-	public EditarVaga() {
+	private VagaModel vagaOriginal;
+
+	public EditarVaga(VagaModel vaga) {
 		super("Editar Vaga");
+		this.vagaOriginal = vaga;
+
 		adicionarComponentes();
+		preencherCampos();
+
 		setSize(600, 500);
 		setLocationRelativeTo(null);
 		setResizable(false);
@@ -20,109 +32,135 @@ public class EditarVaga extends JFrame implements ActionListener {
 		setVisible(true);
 	}
 
-	public void adicionarComponentes() {
+	public EditarVaga() {
+
+	}
+
+	private void adicionarComponentes() {
 		setLayout(null);
 
-		JLabel tituloLbl = new JLabel("Edição de Vaga");
-		tituloLbl.setBounds(200, 10, 300, 30);
+		JLabel tituloLbl = new JLabel("Editar Vaga");
+		tituloLbl.setBounds(230, 10, 200, 30);
 		add(tituloLbl);
 
-		// Código da Vaga
 		JLabel codigoLbl = new JLabel("Código da Vaga:");
 		codigoLbl.setBounds(30, 60, 120, 25);
 		add(codigoLbl);
-
-		codigoVagaField = new JTextField("VAG123"); // preenchido
+		codigoVagaField = new JTextField();
 		codigoVagaField.setBounds(160, 60, 380, 25);
 		codigoVagaField.setEnabled(false);
 		add(codigoVagaField);
 
-		// Nome da Vaga
 		JLabel nomeLbl = new JLabel("Nome da Vaga:");
 		nomeLbl.setBounds(30, 100, 120, 25);
 		add(nomeLbl);
-
-		nomeVagaField = new JTextField("Desenvolvedor Java");
+		nomeVagaField = new JTextField();
 		nomeVagaField.setBounds(160, 100, 380, 25);
 		add(nomeVagaField);
 
-		// Descrição
 		JLabel descricaoLbl = new JLabel("Descrição:");
 		descricaoLbl.setBounds(30, 140, 120, 25);
 		add(descricaoLbl);
-
-		descricaoArea = new JTextArea("Desenvolvimento e manutenção de aplicações web.");
+		descricaoArea = new JTextArea();
 		JScrollPane scrollDescricao = new JScrollPane(descricaoArea);
 		scrollDescricao.setBounds(160, 140, 380, 80);
 		add(scrollDescricao);
 
-		// Motivo
 		JLabel motivoLbl = new JLabel("Motivo da Contratação:");
 		motivoLbl.setBounds(30, 235, 150, 25);
 		add(motivoLbl);
-
-		motivoCombo = new JComboBox<>(new String[] {
-				"Substituição", "Nova Demanda", "Ampliação", "Outros"
-		});
+		motivoCombo = new JComboBox<>(carregarOpcoes("bd/motivoContratacao.txt"));
 		motivoCombo.setBounds(190, 235, 350, 25);
-		motivoCombo.setSelectedItem("Nova Demanda");
 		add(motivoCombo);
 
-		// Cargo
 		JLabel cargoLbl = new JLabel("Cargo:");
 		cargoLbl.setBounds(30, 275, 120, 25);
 		add(cargoLbl);
-
-		cargoCombo = new JComboBox<>(new String[] {
-				"Analista", "Técnico", "Supervisor", "Gerente"
-		});
+		cargoCombo = new JComboBox<>(carregarOpcoes("bd/cargo.txt"));
 		cargoCombo.setBounds(160, 275, 380, 25);
-		cargoCombo.setSelectedItem("Analista");
 		add(cargoCombo);
 
-		// Departamento
 		JLabel departamentoLbl = new JLabel("Departamento:");
 		departamentoLbl.setBounds(30, 315, 120, 25);
 		add(departamentoLbl);
-
-		departamentoCombo = new JComboBox<>(new String[] {
-				"RH", "Financeiro", "TI", "Operações"
-		});
+		departamentoCombo = new JComboBox<>(carregarOpcoes("bd/departamento.txt"));
 		departamentoCombo.setBounds(160, 315, 380, 25);
-		departamentoCombo.setSelectedItem("TI");
 		add(departamentoCombo);
 
-		// Quantidade
 		JLabel quantidadeLbl = new JLabel("Qtd. Recrutada:");
 		quantidadeLbl.setBounds(30, 355, 120, 25);
 		add(quantidadeLbl);
-
-		quantidadeField = new JTextField("2");
+		quantidadeField = new JTextField();
 		quantidadeField.setBounds(160, 355, 380, 25);
 		add(quantidadeField);
 
-		// Botões
-		salvarBtn = new JButton("Salvar");
-		salvarBtn.setBounds(280, 400, 120, 30);
+		salvarBtn = new JButton("Salvar Alterações");
+		salvarBtn.setBounds(160, 400, 150, 30);
 		salvarBtn.addActionListener(this);
 		add(salvarBtn);
 
 		cancelarBtn = new JButton("Cancelar");
-		cancelarBtn.setBounds(420, 400, 120, 30);
+		cancelarBtn.setBounds(320, 400, 150, 30);
 		cancelarBtn.addActionListener(this);
 		add(cancelarBtn);
 	}
 
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == salvarBtn) {
-			JOptionPane.showMessageDialog(this, "Alterações salvas com sucesso!");
-		} else if (e.getSource() == cancelarBtn) {
-			dispose(); // Fecha a janela
-		}
+	private void preencherCampos() {
+		codigoVagaField.setText(vagaOriginal.getCodigo());
+		nomeVagaField.setText(vagaOriginal.getNome());
+		descricaoArea.setText(vagaOriginal.getDescricao());
+		quantidadeField.setText(String.valueOf(vagaOriginal.getQuantidade()));
+
+		motivoCombo.setSelectedItem(vagaOriginal.getMotivo());
+		cargoCombo.setSelectedItem(vagaOriginal.getCargo());
+		departamentoCombo.setSelectedItem(vagaOriginal.getDepartamento());
 	}
 
-	public static void main(String[] args) {
-		new EditarVaga();
+	private String[] carregarOpcoes(String caminho) {
+		List<String> linhas = FicheiroUtil.carregarLinhas(caminho);
+		List<String> nomes = new ArrayList<>();
+		for (String linha : linhas) {
+			String[] partes = linha.split(";");
+			if (partes.length > 1) {
+				nomes.add(partes[1]);
+			}
+		}
+		if (nomes.isEmpty()) {
+			nomes.add("Nenhum dado encontrado");
+		}
+		return nomes.toArray(new String[0]);
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		Object source = e.getSource();
+
+		if (source == salvarBtn) {
+			try {
+				String nome = nomeVagaField.getText();
+				String descricao = descricaoArea.getText();
+				String motivo = (String) motivoCombo.getSelectedItem();
+				String cargo = (String) cargoCombo.getSelectedItem();
+				String departamento = (String) departamentoCombo.getSelectedItem();
+				int quantidade = Integer.parseInt(quantidadeField.getText());
+
+				VagaModel vagaAtualizada = new VagaModel(
+						vagaOriginal.getCodigo(), nome, descricao, motivo, cargo, departamento, quantidade
+				);
+
+				VagaController controller = new VagaController();
+				controller.editarVaga(vagaAtualizada);
+
+				JOptionPane.showMessageDialog(this, "Vaga atualizada com sucesso!");
+				dispose();
+
+			} catch (NumberFormatException ex) {
+				JOptionPane.showMessageDialog(this, "Por favor, insira um número válido para quantidade.");
+			} catch (Exception ex) {
+				JOptionPane.showMessageDialog(this, "Erro ao atualizar vaga: " + ex.getMessage());
+			}
+		} else if (source == cancelarBtn) {
+			dispose();
+		}
 	}
 }

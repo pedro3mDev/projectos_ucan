@@ -24,4 +24,17 @@ public class FicheiroUtil {
 
         return linhas;
     }
+
+    public static void substituirTudo(String caminho, List<String> novasLinhas) {
+        File file = new File(caminho);
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+            for (String linha : novasLinhas) {
+                writer.write(linha);
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

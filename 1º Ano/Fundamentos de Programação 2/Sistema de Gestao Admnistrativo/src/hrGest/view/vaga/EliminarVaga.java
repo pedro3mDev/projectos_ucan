@@ -1,81 +1,71 @@
 package hrGest.view.vaga;
 
+import hrGest.controller.VagaController;
+import hrGest.model.VagaModel;
+import hrGest.repository.VagaRepositorio;
+
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-import java.awt.*;
 import java.awt.event.*;
+import java.util.List;
 
 public class EliminarVaga extends JFrame {
-
-	private JTable tabelaVagas;
-	private DefaultTableModel modeloTabela;
-	private JButton eliminarButton, fecharButton;
+	private JTable tabela;
+	private JButton eliminarBtn, cancelarBtn;
+	private List<VagaModel> vagas;
 
 	public EliminarVaga() {
-		super("Lista de Vagas");
+		super("Eliminar Vaga");
+		vagas = VagaRepositorio.carregar();
 
-		setLayout(new BorderLayout());
+		String[] colunas = { "Código", "Nome", "Cargo", "Departamento" };
+		String[][] dados = new String[vagas.size()][colunas.length];
+		for (int i = 0; i < vagas.size(); i++) {
+			VagaModel v = vagas.get(i);
+			dados[i][0] = v.getCodigo();
+			dados[i][1] = v.getNome();
+			dados[i][2] = v.getCargo();
+			dados[i][3] = v.getDepartamento();
+		}
+
+		tabela = new JTable(dados, colunas);
+		JScrollPane scrollPane = new JScrollPane(tabela);
+		scrollPane.setBounds(20, 20, 540, 250);
+		add(scrollPane);
+
+		eliminarBtn = new JButton("Eliminar");
+		eliminarBtn.setBounds(150, 300, 100, 30);
+		eliminarBtn.addActionListener(e -> eliminarSelecionado());
+		add(eliminarBtn);
+
+		cancelarBtn = new JButton("Cancelar");
+		cancelarBtn.setBounds(300, 300, 100, 30);
+		cancelarBtn.addActionListener(e -> dispose());
+		add(cancelarBtn);
+
+		setLayout(null);
 		setSize(600, 400);
 		setLocationRelativeTo(null);
+		setResizable(false);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
-		// Criar modelo da tabela
-		modeloTabela = new DefaultTableModel();
-		modeloTabela.addColumn("Código");
-		modeloTabela.addColumn("Nome da Vaga");
-		modeloTabela.addColumn("Departamento");
-
-		// Simulação de dados (substitua por dados reais do banco)
-		modeloTabela.addRow(new Object[]{"001", "Analista de RH", "RH"});
-		modeloTabela.addRow(new Object[]{"002", "Programador Java", "TI"});
-		modeloTabela.addRow(new Object[]{"003", "Gestor Financeiro", "Financeiro"});
-
-		// Criar tabela
-		tabelaVagas = new JTable(modeloTabela);
-		JScrollPane scrollPane = new JScrollPane(tabelaVagas);
-		add(scrollPane, BorderLayout.CENTER);
-
-		// Botões
-		JPanel painelBotoes = new JPanel();
-		eliminarButton = new JButton("Eliminar");
-		fecharButton = new JButton("Fechar");
-
-		painelBotoes.add(eliminarButton);
-		painelBotoes.add(fecharButton);
-		add(painelBotoes, BorderLayout.SOUTH);
-
-		// Ação de Eliminar
-		eliminarButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				int linhaSelecionada = tabelaVagas.getSelectedRow();
-				if (linhaSelecionada == -1) {
-					JOptionPane.showMessageDialog(null, "Selecione uma vaga para eliminar.");
-					return;
-				}
-
-				String codigo = modeloTabela.getValueAt(linhaSelecionada, 0).toString();
-				String nome = modeloTabela.getValueAt(linhaSelecionada, 1).toString();
-
-				int opcao = JOptionPane.showConfirmDialog(
-						null,
-						"Tem certeza que deseja eliminar a vaga:\n" + nome + " (Código: " + codigo + ")?",
-						"Confirmação",
-						JOptionPane.YES_NO_OPTION
-				);
-
-				if (opcao == JOptionPane.YES_OPTION) {
-					// Aqui você pode chamar um método para eliminar do banco
-					modeloTabela.removeRow(linhaSelecionada);
-					JOptionPane.showMessageDialog(null, "Vaga eliminada com sucesso.");
-				}
-			}
-		});
-
-		// Ação de Fechar
-		fecharButton.addActionListener(e -> dispose());
-
 		setVisible(true);
+	}
+
+	private void eliminarSelecionado() {
+		int linha = tabela.getSelectedRow();
+		if (linha >= 0) {
+			String codigo = (String) tabela.getValueAt(linha, 0);
+			int confirm = JOptionPane.showConfirmDialog(this,
+					"Tem certeza que deseja eliminar a vaga selecionada?",
+					"Confirmar eliminação", JOptionPane.YES_NO_OPTION);
+
+			if (confirm == JOptionPane.YES_OPTION) {
+				VagaController.eliminarVaga(codigo);
+				JOptionPane.showMessageDialog(this, "Vaga eliminada com sucesso!");
+				dispose();
+			}
+		} else {
+			JOptionPane.showMessageDialog(this, "Selecione uma vaga para eliminar.");
+		}
 	}
 
 	public static void main(String[] args) {

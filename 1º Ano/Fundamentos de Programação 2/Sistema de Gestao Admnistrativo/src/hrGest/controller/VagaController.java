@@ -9,12 +9,23 @@ public class VagaController {
         VagaRepositorio.salvar(vaga);
     }
 
+    public void editarVaga(VagaModel vagaAtualizada) {
+        VagaRepositorio.editar(vagaAtualizada);
+    }
+
+    // VagaController.java
+    public static void eliminarVaga(String codigo) {
+        VagaRepositorio.eliminarVaga(codigo);
+    }
+
+
+    public List<VagaModel> listarVagas() {
+        return VagaRepositorio.carregar();
+    }
+
     private String gerarCodigoAutomatico() {
         List<VagaModel> vagas = VagaRepositorio.carregar();
         return "VAGA" + (vagas.size() + 1);
     }
 
-    public List<VagaModel> listarVagas() {
-        return VagaRepositorio.carregar();
-    }
 }
