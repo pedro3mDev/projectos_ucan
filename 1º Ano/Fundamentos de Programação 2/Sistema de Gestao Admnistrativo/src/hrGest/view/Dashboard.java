@@ -15,8 +15,8 @@ import java.awt.event.ActionListener;
 public class Dashboard extends JFrame implements ActionListener
 {
 	private JMenuBar menuBar;
-	private JMenu ficheiroMenu, ficheiroRecrutamento, ficheiroIntegracao, listagensMenu, tabelasMenu, ajudaMenu;
-	private JMenuItem novoVagaItem, editarVagaItem, eliminarVagaItem;
+	private JMenu ficheiroMenu, ficheiroRecrutamento, ficheiroIntegracao, listagensMenu, tabelasMenu, ajudaMenu, pesquisaMenu;
+	private JMenuItem novoVagaItem, editarVagaItem, eliminarVagaItem, pesquisaVagaDataItem;
 	private JMenuItem novoCandidatoItem, editarCandidatoItem, eliminarCandidatoItem;
 	private JMenuItem novoEntrevistaItem, editarEntrevistaItem, eliminarEntrevistaItem;
 	private JMenuItem novoFuncionarioItem, editarFuncionarioItem, eliminarFuncionarioItem;
@@ -55,6 +55,8 @@ public class Dashboard extends JFrame implements ActionListener
 		tabelasMenu.setMnemonic('T');
 		menuBar.add( ajudaMenu = new JMenu("Ajuda") );
 		ajudaMenu.setMnemonic('A');
+		menuBar.add( pesquisaMenu = new JMenu("Pesquisa") );
+		pesquisaMenu.setMnemonic('P');
 
 
 		// Criar submenu Recrutamento
@@ -103,6 +105,9 @@ public class Dashboard extends JFrame implements ActionListener
 		//Submenus (Ajuda)
 		ajudaMenu.add( sobreItem = new JMenuItem("Sobre"));
 
+		//Pesquisas
+		pesquisaMenu.add( pesquisaVagaDataItem = new JMenuItem("Vaga por Data"));
+
 		// Eventos dos submenus
 		novoVagaItem.addActionListener(this);
 		editarVagaItem.addActionListener(this);
@@ -112,6 +117,8 @@ public class Dashboard extends JFrame implements ActionListener
 		nacionalidadeTbItem.addActionListener(e -> new Nacionalidade());
 		estadoCivilTbItem.addActionListener(e -> new EstadoCivil());
 		sexoTbItem.addActionListener(e -> new Sexo());
+
+
 		/*
 
 		provinciaTbItem.addActionListener(e -> new ProvinciaListagem());

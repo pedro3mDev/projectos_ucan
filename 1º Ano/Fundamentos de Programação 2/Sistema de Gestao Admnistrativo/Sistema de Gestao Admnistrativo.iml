@@ -7,5 +7,16 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES />
+        <JAVADOC>
+          <root url="jar://$MODULE_DIR$/bibliotecas/jcalendar-1.4.zip!/doc/api" />
+        </JAVADOC>
+        <SOURCES>
+          <root url="jar://$MODULE_DIR$/bibliotecas/jcalendar-1.4.zip!/src" />
+        </SOURCES>
+      </library>
+    </orderEntry>
   </component>
 </module>

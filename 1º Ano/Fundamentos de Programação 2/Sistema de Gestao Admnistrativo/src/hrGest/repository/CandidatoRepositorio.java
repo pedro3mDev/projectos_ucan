@@ -1,32 +1,31 @@
 package hrGest.repository;
-import hrGest.model.VagaModel;
+import hrGest.model.CandidatoModel;
 import hrGest.util.FicheiroUtil;
-
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class VagaRepositorio {
+public class CandidatoRepositorio {
 
-    private static final String CAMINHO_FICHEIRO = "bd/vaga.txt";
+    private static final String CAMINHO_FICHEIRO = "bd/candidato.txt";
 
-    public static void salvar(VagaModel vaga) {
+    public static void salvar(CandidatoModel candidato) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(CAMINHO_FICHEIRO, true))) {
-            writer.write(vaga.toLinhaTexto());
+            writer.write(candidato.toLinhaTexto());
             writer.newLine();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public static void editar(VagaModel vagaEditada) {
-        List<VagaModel> vagas = carregar();
+    public static void editar(CandidatoModel candidatoEditado) {
+        List<CandidatoModel> candidatos = carregar();
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(CAMINHO_FICHEIRO))) {
-            for (VagaModel vaga : vagas) {
-                if (vaga.getCodigo().equals(vagaEditada.getCodigo())) {
-                    writer.write(vagaEditada.toLinhaTexto()); // escreve os dados atualizados
+            for (CandidatoModel candidato : candidatos) {
+                if (candidato.getCodigo().equals( candidatoEditado.getCodigo())) {
+                    writer.write(candidatoEditado.toLinhaTexto()); // escreve os dados atualizados
                 } else {
-                    writer.write(vaga.toLinhaTexto()); // mantém os dados antigos
+                    writer.write(candidato.toLinhaTexto()); // mantém os dados antigos
                 }
                 writer.newLine();
             }
@@ -35,17 +34,16 @@ public class VagaRepositorio {
         }
     }
 
-    // VagaRepositorio.java
-    public static void eliminarVaga(String codigo) {
-        List<VagaModel> vagas = carregar();
+    public static void eliminarCandidato(String codigo) {
+        List<CandidatoModel> candidatos = carregar();
         List<String> linhasAtualizadas = new ArrayList<>();
 
-        for (VagaModel v : vagas) {
-            if (!v.getCodigo().equals(codigo)) {
+        for (CandidatoModel c : candidatos) {
+            if (!c.getCodigo().equals(codigo)) {
                 String linha = String.join(";",
-                        v.getCodigo(), v.getNome(), v.getDescricao(),
-                        v.getMotivo(), v.getCargo(), v.getDepartamento(),
-                        String.valueOf(v.getQuantidade())
+                        c.getCodigo(), c.getNome(), c.getSobreNome(),
+                        c.getGenero(), c.getGenero(), c.getDepartamento(),
+                        String.valueOf(c.getQuantidade())
                 );
                 linhasAtualizadas.add(linha);
             }
@@ -55,13 +53,12 @@ public class VagaRepositorio {
     }
 
 
-
-    public static List<VagaModel> carregar() {
-        List<VagaModel> lista = new ArrayList<>();
+    public static List<CandidatoModel> carregar() {
+        List<CandidatoModel> lista = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(CAMINHO_FICHEIRO))) {
             String linha;
             while ((linha = reader.readLine()) != null) {
-                lista.add(VagaModel.fromLinhaTexto(linha));
+                lista.add(CandidatoModel.fromLinhaTexto(linha));
             }
         } catch (IOException e) {
             e.printStackTrace();

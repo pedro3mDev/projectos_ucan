@@ -13,11 +13,9 @@ public class VagaController {
         VagaRepositorio.editar(vagaAtualizada);
     }
 
-    // VagaController.java
     public static void eliminarVaga(String codigo) {
         VagaRepositorio.eliminarVaga(codigo);
     }
-
 
     public List<VagaModel> listarVagas() {
         return VagaRepositorio.carregar();
